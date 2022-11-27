@@ -1,6 +1,3 @@
-
-// originally uploaded to http://blog.naver.com/azure0777
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -101,10 +98,10 @@ public class Ex extends CalendarDataManager{ // CalendarDataManager의 GUI + 메
     JButton clearBut;
 
     JPanel frameBottomPanel;
-    JLabel bottomInfo = new JLabel("Welcome to Memo Calendar!");
+    JLabel bottomInfo = new JLabel("Im_musicalGeek");
     //상수, 메세지
-    final String WEEK_DAY_NAME[] = { "SUN", "MON", "TUE", "WED", "THR", "FRI", "SAT" };
-    final String title = "메모 달력 ver 1.0";
+    final String WEEK_DAY_NAME[] = { "월", "화", "수", "목", "금", "토", "일" };
+    final String title = "나는 뮤덕";
     final String SaveButMsg1 = "를 MemoData폴더에 저장하였습니다.";
     final String SaveButMsg2 = "메모를 먼저 작성해 주세요.";
     final String SaveButMsg3 = "<html><font color=red>ERROR : 파일 쓰기 실패</html>";
@@ -229,7 +226,7 @@ public class Ex extends CalendarDataManager{ // CalendarDataManager의 GUI + 메
         selectedDate.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
 
         memoPanel=new JPanel();
-        memoPanel.setBorder(BorderFactory.createTitledBorder("Memo"));
+        memoPanel.setBorder(BorderFactory.createTitledBorder("뮤지컬 편성표"));
         memoArea = new JTextArea();
         memoArea.setLineWrap(true);
         memoArea.setWrapStyleWord(true);
@@ -237,7 +234,7 @@ public class Ex extends CalendarDataManager{ // CalendarDataManager의 GUI + 메
         readMemo();
 
         memoSubPanel=new JPanel();
-        saveBut = new JButton("Save");
+        saveBut = new JButton("저장");
         saveBut.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent arg0) {
                 try {
@@ -260,7 +257,7 @@ public class Ex extends CalendarDataManager{ // CalendarDataManager의 GUI + 메
                 showCal();
             }
         });
-        delBut = new JButton("Delete");
+        delBut = new JButton("삭제");
         delBut.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
                 memoArea.setText("");
@@ -274,7 +271,7 @@ public class Ex extends CalendarDataManager{ // CalendarDataManager의 GUI + 메
                     bottomInfo.setText(DelButMsg2);
             }
         });
-        clearBut = new JButton("Clear");
+        clearBut = new JButton("초기화");
         clearBut.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent arg0) {
                 memoArea.setText(null);
