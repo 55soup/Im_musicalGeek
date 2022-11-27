@@ -195,8 +195,8 @@ public class Ex extends CalendarDataManager{ // CalendarDataManager의 GUI + 메
             weekDaysName[i].setBorderPainted(false);
             weekDaysName[i].setContentAreaFilled(false);
             weekDaysName[i].setForeground(Color.WHITE);
-            if(i == 0) weekDaysName[i].setBackground(new Color(200, 50, 50));
-            else if (i == 6) weekDaysName[i].setBackground(new Color(50, 100, 200));
+            if(i == 0) weekDaysName[i].setBackground(new Color(227, 120, 120));
+            else if (i == 6) weekDaysName[i].setBackground(new Color(114, 226, 217));
             else weekDaysName[i].setBackground(new Color(150, 150, 150));
             weekDaysName[i].setOpaque(true);
             weekDaysName[i].setFocusPainted(false);
