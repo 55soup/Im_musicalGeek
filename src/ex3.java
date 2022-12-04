@@ -188,14 +188,15 @@ public class ex3 extends CalendarDataManager{ // CalendarDataManager의 GUI
         memoArea.setLineWrap(true);
         memoArea.setWrapStyleWord(true);
         memoAreaSP = new JScrollPane(memoArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        memoArea.setPreferredSize(new Dimension(400, 10000)); // 메모장크기 조절
+        memoArea.setPreferredSize(new Dimension(400, 15000)); // 메모장크기 조절
         String[][] getMusicalList = parsing();
         StringBuilder stringBuilder = new StringBuilder();
 
         for (int i = 0; i < getMusicalList.length; i++) {
             for (int j = 0; j < 5; j++) {
-                stringBuilder.append(getMusicalList[i][j]+ " ");
+                stringBuilder.append(getMusicalList[i][j]+ "\n");
             }
+            stringBuilder.append("\n");
         }
 
         String strArrayToString = stringBuilder.toString();
