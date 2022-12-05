@@ -11,12 +11,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class ex3 extends CalendarDataManager{ // CalendarDataManager의 GUI
     // 창 구성요소와 배치도
@@ -35,12 +35,12 @@ public class ex3 extends CalendarDataManager{ // CalendarDataManager의 GUI
     JLabel curMMYYYYLab;
     JButton nMonBut;
     JButton nYearBut;
-    ListenForCalOpButtons lForCalOpButtons = new ListenForCalOpButtons();
+    ListenForCalOpButtons lForCalOpButtons = new ListenForCalOpButtons(); //날짜 눌렀을 때
 
     JPanel calPanel;
     JButton weekDaysName[];
     JButton dateButs[][] = new JButton[6][7];
-//    listenForDateButs lForDateButs = new listenForDateButs();
+    listenForDateButs lForDateButs = new listenForDateButs();
 
     JPanel infoPanel;
     JLabel infoClock;
@@ -166,7 +166,7 @@ public class ex3 extends CalendarDataManager{ // CalendarDataManager의 GUI
                 dateButs[i][j].setContentAreaFilled(false);
                 dateButs[i][j].setBackground(Color.WHITE);
                 dateButs[i][j].setOpaque(true);
-//                dateButs[i][j].addActionListener(lForDateButs);
+                dateButs[i][j].addActionListener(lForDateButs);
                 calPanel.add(dateButs[i][j]);
             }
         }
@@ -188,24 +188,19 @@ public class ex3 extends CalendarDataManager{ // CalendarDataManager의 GUI
         memoArea.setLineWrap(true);
         memoArea.setWrapStyleWord(true);
         memoAreaSP = new JScrollPane(memoArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        memoAreaSP = new JScrollPane(memoArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         memoArea.setPreferredSize(new Dimension(400, 15000)); // 메모장크기 조절
-        String[][] getMusicalList = parsing();
-        StringBuilder stringBuilder = new StringBuilder();
+        curMMYYYYLab.setText("<html><table width=100><tr><th><font size=5>"+((calMonth+1)<10?"&nbsp;":"")+(calMonth+1)+" / "+calYear+"</th></tr></table></html>");
+//        String date = ""; // 클릭한 날짜 가져오기
+//        String[][] getMusicalList = parsing(date);
 
-        for (int i = 0; i < getMusicalList.length; i++) {
-            for (int j = 0; j < 5; j++) {
-                stringBuilder.append(getMusicalList[i][j]+ "\n");
-            }
-            stringBuilder.append("\n");
-        }
 
-        String strArrayToString = stringBuilder.toString();
-        memoArea.setText(strArrayToString);
+        showCal();
 //        readMemo();
 
         // 메모 저장
         memoSubPanel=new JPanel();
-//        saveBut = new JButton("저장");
+        saveBut = new JButton("저장");
 //        saveBut.addActionListener(new ActionListener(){
 //            public void actionPerformed(ActionEvent arg0) {
 //                try {
@@ -251,12 +246,12 @@ public class ex3 extends CalendarDataManager{ // CalendarDataManager의 GUI
 //                bottomInfo.setText(ClrButMsg1);
 //            }
 //        });
-
+        //박선주
         try {
             BufferedImage image;
             //URL을 사용하는 경우
 
-            URL url = new URL("이미지 URL");
+            URL url = new URL("http://www.kopis.or.kr/upload/pfmPoster/PF_PF201365_221103_095319.gif");
             image = ImageIO.read(url);
 
         } catch (MalformedURLException e) {
@@ -316,25 +311,25 @@ public class ex3 extends CalendarDataManager{ // CalendarDataManager의 GUI
             dateButs[today.get(Calendar.WEEK_OF_MONTH)-1][today.get(Calendar.DAY_OF_WEEK)-1].requestFocusInWindow();
     }
     //메모를 읽어옴.
-//    private void readMemo(){
-//        try{
-//            File f = new File("MemoData/"+calYear+((calMonth+1)<10?"0":"")+(calMonth+1)+(calDayOfMon<10?"0":"")+calDayOfMon+".txt");
-//            if(f.exists()){
-//                BufferedReader in = new BufferedReader(new FileReader("MemoData/"+calYear+((calMonth+1)<10?"0":"")+(calMonth+1)+(calDayOfMon<10?"0":"")+calDayOfMon+".txt"));
-//                String memoAreaText= new String();
-//                while(true){
-//                    String tempStr = in.readLine();
-//                    if(tempStr == null) break;
-//                    memoAreaText = memoAreaText + tempStr + System.getProperty("line.separator");
-//                }
-//                memoArea.setText(memoAreaText);
-//                in.close();
-//            }
-//            else memoArea.setText("");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void readMemo(){
+        try{
+            File f = new File("MemoData/"+calYear+((calMonth+1)<10?"0":"")+(calMonth+1)+(calDayOfMon<10?"0":"")+calDayOfMon+".txt");
+            if(f.exists()){
+                BufferedReader in = new BufferedReader(new FileReader("MemoData/"+calYear+((calMonth+1)<10?"0":"")+(calMonth+1)+(calDayOfMon<10?"0":"")+calDayOfMon+".txt"));
+                String memoAreaText= new String();
+                while(true){
+                    String tempStr = in.readLine();
+                    if(tempStr == null) break;
+                    memoAreaText = memoAreaText + tempStr + System.getProperty("line.separator");
+                }
+                memoArea.setText(memoAreaText);
+                in.close();
+            }
+            else memoArea.setText("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private void showCal(){
         for(int i=0;i<CAL_HEIGHT;i++){
             for(int j=0;j<CAL_WIDTH;j++){
@@ -366,7 +361,7 @@ public class ex3 extends CalendarDataManager{ // CalendarDataManager의 GUI
         public void actionPerformed(ActionEvent e) {
             if(e.getSource() == todayBut){
                 setToday();
-//                lForDateButs.actionPerformed(e);
+                lForDateButs.actionPerformed(e);
                 focusToday();
             }
             else if(e.getSource() == lYearBut) moveMonth(-12);
@@ -378,35 +373,83 @@ public class ex3 extends CalendarDataManager{ // CalendarDataManager의 GUI
             showCal();
         }
     }
-//    private class listenForDateButs implements ActionListener{
-//        public void actionPerformed(ActionEvent e) {
-//            int k=0,l=0;
-//            for(int i=0 ; i<CAL_HEIGHT ; i++){
-//                for(int j=0 ; j<CAL_WIDTH ; j++){
-//                    if(e.getSource() == dateButs[i][j]){
-//                        k=i;
-//                        l=j;
-//                    }
-//                }
-//            }
-//
-//            if(!(k ==0 && l == 0)) calDayOfMon = calDates[k][l]; //today버튼을 눌렀을때도 이 actionPerformed함수가 실행되기 때문에 넣은 부분
-//
-//            cal = new GregorianCalendar(calYear,calMonth,calDayOfMon);
-//
-//            String dDayString = new String();
-//            int dDay=((int)((cal.getTimeInMillis() - today.getTimeInMillis())/1000/60/60/24));
-//            if(dDay == 0 && (cal.get(Calendar.YEAR) == today.get(Calendar.YEAR))
-//                    && (cal.get(Calendar.MONTH) == today.get(Calendar.MONTH))
-//                    && (cal.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH))) dDayString = "Today";
-//            else if(dDay >=0) dDayString = "D-"+(dDay+1);
-//            else if(dDay < 0) dDayString = "D+"+(dDay)*(-1);
-//
-//            selectedDate.setText("<Html><font size=3>"+(calMonth+1)+"/"+calDayOfMon+"/"+calYear+"&nbsp;("+dDayString+")</html>");
-//
-//            readMemo();
-//        }
-//    }
+    private class listenForDateButs implements ActionListener{// 달력 날짜 눌렀을 때
+        public void actionPerformed(ActionEvent e) {
+            int k=0,l=0;
+            for(int i=0 ; i<CAL_HEIGHT ; i++){
+                for(int j=0 ; j<CAL_WIDTH ; j++){
+                    if(e.getSource() == dateButs[i][j]){
+                        k=i;
+                        l=j;
+                    }
+                }
+            }
+
+            if(!(k ==0 && l == 0)) calDayOfMon = calDates[k][l]; //today버튼을 눌렀을때도 이 actionPerformed함수가 실행되기 때문에 넣은 부분
+
+            cal = new GregorianCalendar(calYear,calMonth,calDayOfMon);
+//            System.out.println(calYear+""+(calMonth+1)+""+calDayOfMon); //출력
+
+            String month="", days="";
+            if(calMonth<10)  month = "0"+(calMonth+1);
+            else month= String.valueOf(calMonth+1);
+            if(calDayOfMon<10) days="0"+calDayOfMon;
+            else days= String.valueOf(calDayOfMon);
+            String clickDate = calYear+month+days;
+
+            String[][] getMusicalList = parsing(clickDate); // 날짜에 맞는 데이터 가져오기
+            String dDayString = new String();
+            int dDay=((int)((cal.getTimeInMillis() - today.getTimeInMillis())/1000/60/60/24));
+            if(dDay == 0 && (cal.get(Calendar.YEAR) == today.get(Calendar.YEAR))
+                    && (cal.get(Calendar.MONTH) == today.get(Calendar.MONTH))
+                    && (cal.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH))) dDayString = "Today";
+            else if(dDay >=0) dDayString = "D-"+(dDay+1);
+            else if(dDay < 0) dDayString = "D+"+(dDay)*(-1);
+
+            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder builderStartDate = new StringBuilder();
+            StringBuilder builderEndDate = new StringBuilder();
+
+            for (int i = 0; i < getMusicalList.length; i++) {
+                stringBuilder.append(getMusicalList[i][0]+ "\n");
+                stringBuilder.append(getMusicalList[i][1]+ "\n");
+                stringBuilder.append(getMusicalList[i][2]+ "\n");
+                stringBuilder.append(getMusicalList[i][3]+ "~" + getMusicalList[i][4]);
+                builderStartDate.append(getMusicalList[i][3]);
+                builderEndDate.append(getMusicalList[i][4]);
+
+                // 날짜에 따라 저장
+                stringBuilder.append("\n\n");
+
+                String strArrayToString = stringBuilder.toString();
+//            int stringStartDate = Integer.parseInt(builderStartDate.toString().replace(".",""));
+//            int stringEndDate = Integer.parseInt(builderEndDate.toString().replace(".",""));
+
+                memoArea.setText(strArrayToString);
+
+                try {
+                    File f= new File("MemoData");
+                    if(!f.isDirectory()) f.mkdir();
+
+                    String memo = memoArea.getText();
+                    if(memo.length()>0){
+                        BufferedWriter out = new BufferedWriter(new FileWriter("MemoData/"+ clickDate + ".txt"));
+                        String str = memoArea.getText();
+                        out.write(str);
+                        out.close();
+                        bottomInfo.setText("MemoData/"+ clickDate + ".txt 저장");
+                    }
+                    else
+                        bottomInfo.setText(SaveButMsg2);
+                } catch (IOException d) {
+                    bottomInfo.setText(SaveButMsg3);
+                }
+            }
+            selectedDate.setText("<Html><font size=3>"+(calMonth+1)+"/"+calDayOfMon+"/"+calYear+"&nbsp;("+dDayString+")</html>");
+
+            readMemo();
+        }
+    }
     private class ThreadConrol extends Thread{
         public void run(){
             boolean msgCntFlag = false;
@@ -447,11 +490,11 @@ public class ex3 extends CalendarDataManager{ // CalendarDataManager의 GUI
         }
     }
 
-    public static String[][] parsing(){
+    public static String[][] parsing(String date){
         try{
             final String KEY = "c89c9b35a0354e8e9a6d47b43834b769";
             String genre_code = "AAAB"; //뮤지컬 장르 코드
-            String URL = "https://www.kopis.or.kr/openApi/restful/pblprfr?service=d2ff79b5a9ef4f2a87d79a89e7e35de7&stdate=20220101&eddate=20221230&prfstate=02&cpage=1&rows=2000&shcate=AAAB";
+            String URL = "https://www.kopis.or.kr/openApi/restful/pblprfr?service=d2ff79b5a9ef4f2a87d79a89e7e35de7&stdate="+date+"&eddate="+date+"&prfstate=02&cpage=1&rows=2000&shcate=AAAB";
             DocumentBuilderFactory dbFactoty = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactoty.newDocumentBuilder();
             Document doc = dBuilder.parse(URL);
@@ -460,14 +503,12 @@ public class ex3 extends CalendarDataManager{ // CalendarDataManager의 GUI
             doc.getDocumentElement().normalize();
             // 파싱할 tag
             NodeList nList = doc.getElementsByTagName("db");
-//            ArrayList<String>[] musicalList = new ArrayList[1000]; //뮤지컬내용을 담을 제네릭배열
             String[][] musicalList = new String[nList.getLength()][5];
             //nList.getLength();
             for(int i=0; i<nList.getLength(); i++) {
                 Node nNode = nList.item(i);
                 eElement = (Element) nNode;
                 String showID = getTagValue("mt20id", eElement);
-//                System.out.println("뮤지컬코드 : " + getTagValue("mt20id", eElement)); //뮤지컬 코드
                 String detailURL = "http://www.kopis.or.kr/openApi/restful/pblprfr/" + showID + "?service=" + KEY;
 
                 DocumentBuilderFactory dbFactoty2 = DocumentBuilderFactory.newInstance();
@@ -498,14 +539,9 @@ public class ex3 extends CalendarDataManager{ // CalendarDataManager의 GUI
 //                System.out.println("========================================================");
                 musicalList[i][0] = musicalName; //뮤지컬 이름
                 musicalList[i][1] = poster; //뮤지컬 포스터
-                musicalList[i][2] = startDate; //시작 날짜
-                musicalList[i][3] = endDate; //끝 날짜
-                musicalList[i][4] = site; //장소
-//                musicalList[i].add(site);
-//                musicalList[i].add(poster);
-//                musicalList[i].add(startDate);
-//                musicalList[i].add(endDate);
-//                return musicalName+actor+site+runningTime+"\n"+price+poster+startDate+endDate;
+                musicalList[i][2] = site; //장소
+                musicalList[i][3] = startDate; //시작날짜
+                musicalList[i][4] = endDate; // 끝날짜
             }
             return musicalList;
         }catch (Exception e){
